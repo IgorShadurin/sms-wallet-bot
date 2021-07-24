@@ -34,3 +34,9 @@ application's language in `.env`.
 Set testing mode to `true` in `.env` and start the server with command `node index.js`. 
 
 Open `http://localhost:8080/debug` in your browser.
+
+## How to deploy smart contract?
+
+Put `.env` into `smart` folder. Add line with private key from wallet which will deploy contracts `PRIVATE_KEY=`.
+
+Use [instruction](https://www.xdaichain.com/for-developers/developer-resources/smart-contract-deployment).

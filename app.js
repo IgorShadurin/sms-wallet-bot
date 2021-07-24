@@ -40,22 +40,28 @@ async function sendSms(toNumber, text) {
 
 }
 
+function getCurrencyByNumber(phoneNumber, isTest) {
+    // todo detect currency by phone number. if test - usd
+    return 'USD';
+}
+
 async function getBalance(phoneNumber) {
     // todo get balance from contract
     return 0;
 }
 
-async function createOrder(phone, type) {
+async function createOrder(phone, currency, type) {
     // todo create new order in smart contract, return new if
     // type === battery or water
     return 123;
 }
 
-async function getPrice(item) {
-    // todo get price from contract. Item could be 'battery' and 'water'
+async function getPrice(item, currency) {
+    // todo get price from contract by currency. Item could be 'battery' and 'water'
 }
 
 async function smsHandler(message, phoneNumber, isTest = false) {
+    const currency = getCurrencyByNumber(phoneNumber, isTest);
     // todo validate phone number is registered in smart contract
     let result = lang.unrecognized_sms;
     // start message
@@ -68,16 +74,16 @@ async function smsHandler(message, phoneNumber, isTest = false) {
         }
         // want to rent a battery
     } else if (message === '1') {
-        const price = await getPrice('battery');
-        result = lang.service_1.replace('{price}', price).replace('{currency}', lang.currency);
+        const price = await getPrice('battery', currency);
+        result = lang.service_1.replace('{price}', price).replace('{currency}', currency);
         // want to buy water
     } else if (message === '2') {
-        const price = await getPrice('water');
-        result = lang.service_2.replace('{price}', price).replace('{currency}', lang.currency);
+        const price = await getPrice('water', currency);
+        result = lang.service_2.replace('{price}', price).replace('{currency}', currency);
         // renting accepted
     } else if (message === '3') {
         // todo put order to contract, get id
-        const id = await createOrder(phoneNumber, 'battery');
+        const id = await createOrder(phoneNumber, currency, 'battery');
         if (id > 0) {
             result = lang.order_1_success.replace('{id}', id);
         } else {
@@ -85,7 +91,7 @@ async function smsHandler(message, phoneNumber, isTest = false) {
         }
         // buying accepted
     } else if (message === '4') {
-        const id = await createOrder(phoneNumber, 'water');
+        const id = await createOrder(phoneNumber, currency, 'water');
         if (id > 0) {
             result = lang.order_2_success.replace('{id}', id);
         } else {
@@ -96,11 +102,11 @@ async function smsHandler(message, phoneNumber, isTest = false) {
         // todo send notification about renting complete
         result = lang.ready_to_return_1;
         // water is ok. unlock funds
-    }else if (message === '41') {
+    } else if (message === '41') {
         // todo unlock funds for company
         result = lang.complete_2;
         // no conflict with renting. unlock funds
-    }else if (message === '311') {
+    } else if (message === '311') {
         // todo unlock funds for company
         result = lang.complete_1;
     }
@@ -109,7 +115,7 @@ async function smsHandler(message, phoneNumber, isTest = false) {
 }
 
 function validateEnv() {
-    // todo do some validation
+    // todo do some startup validation
 }
 
 validateEnv();
