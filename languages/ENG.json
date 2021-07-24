@@ -1,0 +1,15 @@
+{
+  "currency": "USD",
+  "start": "Hi. Send 1 if you want to rent a battery or 2 if you want to purchase water",
+  "start_no_fund": "Hi. If you want to rent a battery or purchase water, you should fund your balance with USSD. Enter *386*AMOUNT# to fund entered amount.",
+  "unrecognized_sms": "Unrecognized command. Please, send # to start",
+  "service_1": "Price for renting is {price} {currency}. If you agreed, send 3.",
+  "service_2": "Price for purchase is {price} {currency}. If you agreed, send 4.",
+  "order_1_success": "Order accepted. #{id}. When you are ready to return the battery, send 31",
+  "order_2_success": "Order accepted. #{id}. If you receive water in good condition, send 41",
+  "order_fail_funds": "Not enough funds",
+  "balance": "Your balance is {balance} {currency}",
+  "ready_to_return_1": "You will be contacted for a battery in a short time. To complete payment send 311",
+  "complete_1": "Payment for the battery complete!",
+  "complete_2": "Payment for water complete!"
+}
