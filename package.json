@@ -1,0 +1,15 @@
+{
+  "name": "sms-wallet-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:IgorShadurin/sms-wallet-bot.git",
+  "author": "Igor Shadurin <igor.shadurin@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "africastalking": "^0.5.4",
+    "body-parser": "^1.19.0",
+    "dotenv": "^10.0.0",
+    "ethers": "^5.4.2",
+    "express": "^4.17.1"
+  }
+}
