@@ -3,6 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const {okResult} = require('./utils');
 const TelegramBot = require('node-telegram-bot-api');
+const WalletEscrow = require("./wallet-escrow");
+const {fundPhoneWallet} = require("./wallet-escrow");
 
 const envPathFirst = `${process.env.PWD}/../.env`;
 const envPathSecond = `${process.env.PWD}/.env`;
@@ -12,6 +14,13 @@ const isTestMode = process.env.APP_IS_TEST;
 
 const langPath = `${process.env.PWD}/languages/${process.env.APP_DEFAULT_LANGUAGE}.json`;
 const lang = JSON.parse(fs.readFileSync(langPath));
+
+const balances = {0: 0};
+
+const orderType = {
+    'water': '0x7464bd924e765ce487910dde7cf78faee47c96a6328f88a0cd374cd7c2491abd',
+    'battery': '0xa3dff00f6f863c6e9712ee43c469b14000a9f63073ae34afaa647763cb18c186'
+};
 
 const currencyKeys = {
     // US Dollar
@@ -28,13 +37,16 @@ const currencyKeys = {
     'KES': '0x589be49821419c9c2fbb26087748bf3420a5c13b45349828f5cac24c58bbaa7b',
 };
 
+let bot = null;
+
 if (isTestMode) {
-    const bot = new TelegramBot(process.env.APP_TEST_TELEGRAM_TOKEN, {polling: true});
+    bot = new TelegramBot(process.env.APP_TEST_TELEGRAM_TOKEN, {polling: true});
 
     bot.on('message', async (msg) => {
         const {text} = msg;
         const chatId = msg.chat.id;
-        const response = await smsHandler(text, chatId, true);
+        console.log('chatId', chatId);
+        const response = await smsHandler(text, 0, true);
         await bot.sendMessage(chatId, response);
     });
 }
@@ -44,7 +56,7 @@ async function sendSms(toNumber, text) {
 }
 
 async function fundPhone(phoneNumber, amount, currency) {
-
+    await fundPhoneWallet(phoneNumber, currency, amount);
 }
 
 function getCurrencyByNumber(phoneNumber, isTest) {
@@ -54,13 +66,12 @@ function getCurrencyByNumber(phoneNumber, isTest) {
 
 async function getBalance(phoneNumber) {
     // todo get balance from contract
-    return 0;
+    return balances[phoneNumber];
 }
 
 async function createOrder(phone, currency, type) {
-    // todo create new order in smart contract, return new if
-    // type === battery or water
-    return 123;
+    // await WalletEscrow.createOrder(phone, orderType.water, 10, 5, currency);
+    return 753;
 }
 
 // async function getPrice(item, currency) {
@@ -68,7 +79,8 @@ async function createOrder(phone, currency, type) {
 // }
 
 async function smsHandler(message, phoneNumber, isTest = false) {
-    const currency = getCurrencyByNumber(phoneNumber, isTest);
+    // const currency = getCurrencyByNumber(phoneNumber, isTest);
+    const currency = lang.currency;
     // todo validate phone number is registered in smart contract
     let result = lang.unrecognized_sms;
     // start message
@@ -179,6 +191,12 @@ app.post('/ussd-received', async (req, res) => {
     console.log(phone, type, amount, currency)
     if (type === 'fund' && Number(amount) > 0) {
         await fundPhone(phone, amount, currency);
+
+        if (isTestMode) {
+            // test bot
+            bot?.sendMessage(580489664, `Your balance funded with ${amount} ${currency}`);
+            balances[phone] += amount;
+        }
     }
 
     okResult(res);

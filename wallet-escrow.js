@@ -96,6 +96,10 @@ module.exports.test = async () => {
 
 // bytes32 phone, bytes32 orderType, uint totalDeposit, uint endSum, bytes32 currency
 module.exports.createOrder = async (phone, orderType, totalDeposit, endSum, currency) => {
+    phone = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(phone));
+    // orderType = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(orderType));
+    currency = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(currency));
+
     const data = await contractInstanceRW.createOrder(
         ethers.utils.keccak256(phone),
         ethers.utils.keccak256(orderType),
@@ -118,11 +122,20 @@ module.exports.releaseDeposit = async (orderId) => {
 
 //bytes32 phone, bytes32 currency, uint sum
 module.exports.fundPhoneWallet = async (phone, currency, sum) => {
+    phone = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(phone));
+    currency = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(currency));
     const data = await contractInstanceRW.fundPhoneWallet(
         ethers.utils.keccak256(phone),
         ethers.utils.keccak256(currency),
         ethers.utils.parseEther(sum.toString()),
     );
 
-    return provider.waitForTransaction(data.hash);
+    return await provider.waitForTransaction(data.hash);
+};
+
+module.exports.getPhoneBalance = async (phone, currency) => {
+    phone = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(phone));
+    currency = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(currency));
+
+    return await contractInstanceRW.Phones(phone, currency);
 };
