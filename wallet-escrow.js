@@ -84,14 +84,14 @@ const sendEths = async ({
     return await provider.waitForTransaction(hash);
 }
 
-module.exports.test = async () => {
-    const data = await sendEths({
-        to: '0x980F5aC0Fe183479B87f78E7892f8002fB9D5401',
-        from: '0x5928f91b1A4Fd3D6C6Eda4222814f51Ab0615975',
-        fromPrivateKey: privateKey,
-        value: '0.00001'
-    });
-};
+// module.exports.test = async () => {
+//     const data = await sendEths({
+//         to: '0x980F5aC0Fe183479B87f78E7892f8002fB9D5401',
+//         from: '0x5928f91b1A4Fd3D6C6Eda4222814f51Ab0615975',
+//         fromPrivateKey: privateKey,
+//         value: '0.00001'
+//     });
+// };
 
 
 // bytes32 phone, bytes32 orderType, uint totalDeposit, uint endSum, bytes32 currency
@@ -101,11 +101,11 @@ module.exports.createOrder = async (phone, orderType, totalDeposit, endSum, curr
     currency = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(currency));
 
     const data = await contractInstanceRW.createOrder(
-        ethers.utils.keccak256(phone),
-        ethers.utils.keccak256(orderType),
+        phone,
+        orderType,
         ethers.utils.parseEther(totalDeposit.toString()),
         ethers.utils.parseEther(endSum.toString()),
-        ethers.utils.keccak256(currency),
+        currency,
     );
 
     return provider.waitForTransaction(data.hash);
@@ -125,8 +125,8 @@ module.exports.fundPhoneWallet = async (phone, currency, sum) => {
     phone = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(phone));
     currency = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(currency));
     const data = await contractInstanceRW.fundPhoneWallet(
-        ethers.utils.keccak256(phone),
-        ethers.utils.keccak256(currency),
+        phone,
+        currency,
         ethers.utils.parseEther(sum.toString()),
     );
 

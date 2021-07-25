@@ -70,7 +70,7 @@ async function getBalance(phoneNumber) {
 }
 
 async function createOrder(phone, currency, type) {
-    // await WalletEscrow.createOrder(phone, orderType.water, 10, 5, currency);
+    await WalletEscrow.createOrder(phone, orderType.water, 10, 5, currency);
     return 753;
 }
 
