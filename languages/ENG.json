@@ -1,7 +1,9 @@
 {
-  "currency": "USD",
-  "start": "Hi. Send 1 if you want to rent a battery or 2 if you want to purchase water",
-  "start_no_fund": "Hi. If you want to rent a battery or purchase water, you should fund your balance with USSD. Enter *386*AMOUNT# to fund entered amount.",
+  "currency": "KES",
+  "price_service_1": "20",
+  "price_service_2": "5",
+  "start": "Hi! Send 1 if you want to rent a battery or 2 if you want to purchase water",
+  "start_no_fund": "Hi! If you want to rent a battery or purchase water, you should create a wallet. Enter USSD *386*AMOUNT# to create a wallet and fund entered amount.",
   "unrecognized_sms": "Unrecognized command. Please, send # to start",
   "service_1": "Price for renting is {price} {currency}. If you agreed, send 3.",
   "service_2": "Price for purchase is {price} {currency}. If you agreed, send 4.",

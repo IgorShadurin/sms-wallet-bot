@@ -13,6 +13,21 @@ const isTestMode = process.env.APP_IS_TEST;
 const langPath = `${process.env.PWD}/languages/${process.env.APP_DEFAULT_LANGUAGE}.json`;
 const lang = JSON.parse(fs.readFileSync(langPath));
 
+const currencyKeys = {
+    // US Dollar
+    'USD': '0xc4ae21aac0c6549d71dd96035b7e0bdb6c79ebdba8891b666115bc976d16a29e',
+    // Nigerian naira
+    'NGN': '0xc86df68658952a08317197d7ef595a27d44b37f41622030c813206b26f675349',
+    // Djiboutian franc
+    'DJF': '0xd76a95916688d85014953105a5437b5ae053924ac2b269cafe3cd6e453fac815',
+    // West African CFA franc
+    'XOF': '0xe14aac48809d86944f63c7c241c81173d25cd5dda2a1535c2025343eadea00ef',
+    // Indonesian rupiah
+    'IDR': '0xc681c4652bae8bd4b59bec1cdb90f868d93cc9896af9862b196843f54bf254b3',
+    // Kenyan shilling
+    'KES': '0x589be49821419c9c2fbb26087748bf3420a5c13b45349828f5cac24c58bbaa7b',
+};
+
 if (isTestMode) {
     const bot = new TelegramBot(process.env.APP_TEST_TELEGRAM_TOKEN, {polling: true});
 
@@ -24,19 +39,11 @@ if (isTestMode) {
     });
 }
 
-
-// User texts a # to sign up for a battery rental and/or water purchasing services
-// User is created a wallet with a simple code (in these markets reading skills are limited)
-// User funds wallet in local currency via USSD (the money in the wallet is represented as local currency)
-// User begins rental process by putting the cost of the rental and a deposit into an escrow
-// User rents a battery and/or purchases water
-// Company receives funds and provisions services based on amount of money sent
-// User ends use of services via text message and returns battery
-// User account deposit is returned and the cost of the rental and/or purchase of water is kept by the company
-// User gets in their wallet 1/3 of the value of the total amount of a carbon credit they saved
-// (i.e. 1 Carbon Credit sells for $10 USD per ton. Each rental of a battery from solar power saves .0001 tons of carbon per day. So each user would receive $0.00034 once the carbon credit associated to their usage is sold. This can be kept in eth but needs to be represented in their wallet as the local currency).
-
 async function sendSms(toNumber, text) {
+
+}
+
+async function fundPhone(phoneNumber, amount, currency) {
 
 }
 
@@ -56,9 +63,9 @@ async function createOrder(phone, currency, type) {
     return 123;
 }
 
-async function getPrice(item, currency) {
-    // todo get price from contract by currency. Item could be 'battery' and 'water'
-}
+// async function getPrice(item, currency) {
+//     // todo get price from contract by currency. Item could be 'battery' and 'water'
+// }
 
 async function smsHandler(message, phoneNumber, isTest = false) {
     const currency = getCurrencyByNumber(phoneNumber, isTest);
@@ -74,12 +81,12 @@ async function smsHandler(message, phoneNumber, isTest = false) {
         }
         // want to rent a battery
     } else if (message === '1') {
-        const price = await getPrice('battery', currency);
-        result = lang.service_1.replace('{price}', price).replace('{currency}', currency);
+        // const price = await getPrice('battery', currency);
+        result = lang.service_1.replace('{price}', lang.price_service_1).replace('{currency}', currency);
         // want to buy water
     } else if (message === '2') {
-        const price = await getPrice('water', currency);
-        result = lang.service_2.replace('{price}', price).replace('{currency}', currency);
+        // const price = await getPrice('water', currency);
+        result = lang.service_2.replace('{price}', lang.price_service_2).replace('{currency}', currency);
         // renting accepted
     } else if (message === '3') {
         // todo put order to contract, get id
@@ -147,7 +154,7 @@ app.get('/debug', (req, res) => {
     }
 });
 
-app.get('/sms-received', async (req, res) => {
+app.post('/sms-received', async (req, res) => {
     const {text, phone} = req.body;
     let sendSmsText = '';
 
@@ -166,8 +173,13 @@ app.get('/sms-received', async (req, res) => {
     }
 });
 
-app.get('/ussd-received', async (req, res) => {
-    const {text, phone} = req.body;
+app.post('/ussd-received', async (req, res) => {
+    console.log(req.body);
+    const {phone, type, amount, currency} = req.body;
+    console.log(phone, type, amount, currency)
+    if (type === 'fund' && Number(amount) > 0) {
+        await fundPhone(phone, amount, currency);
+    }
 
     okResult(res);
 });

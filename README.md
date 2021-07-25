@@ -33,7 +33,9 @@ application's language in `.env`.
 
 Set testing mode to `true` in `.env` and start the server with command `node index.js`. 
 
-Open `http://localhost:8080/debug` in your browser.
+You could test dialog scenarios via Telegram bot. Just define `APP_TEST_TELEGRAM_TOKEN` key from test-bot.
+
+Open `http://localhost:8080/debug` in your browser for sending test USSD requests.
 
 ## How to deploy smart contract?
 
