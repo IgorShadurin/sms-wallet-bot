@@ -41,4 +41,8 @@ Open `http://localhost:8080/debug` in your browser for sending test USSD request
 
 Put `.env` into `smart` folder. Add line with private key from wallet which will deploy contracts `PRIVATE_KEY=`.
 
+`truffle deploy --reset --network poa` deploy to POA
+
+`truffle deploy --reset --network poa` deploy to xDai
+
 Use [instruction](https://www.xdaichain.com/for-developers/developer-resources/smart-contract-deployment).

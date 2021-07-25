@@ -82,7 +82,7 @@ module.exports = {
                 })
             },
             network_id: 77,
-            gas: 500000,
+            gas: 12500000,
             gasPrice: 1000000000
         },
         xdai: {
