@@ -1,5 +1,7 @@
 # SMS Wallet Bot
 
+[![Project preview](https://img.youtube.com/vi/WpLx_6xfDeY/0.jpg)](https://youtu.be/WpLx_6xfDeY)
+
 ## How it works?
 
 This application is the server which receives SMS/USSD messages
