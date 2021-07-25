@@ -12,9 +12,9 @@ Application connected with the smart contract which stores all information about
 operations.
 
 User can add finances to his wallet via USSD and manage it via SMS. After every funding operation received sum recorded
-to smart contract deployed to [xDai network](https://www.xdaichain.com/).
+to smart contract deployed to super fast [xDai network](https://www.xdaichain.com/) and tested in POA Sokol network.
 
-Supported multi-languages.
+Supported multi-languages for different countries. Supported dynamic countries where smart contract could be used. 
 
 ## How to setup project?
 
