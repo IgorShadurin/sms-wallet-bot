@@ -45,6 +45,6 @@ Put `.env` into `smart` folder. Add line with private key from wallet which will
 
 `truffle deploy --reset --network poa` deploy to POA
 
-`truffle deploy --reset --network poa` deploy to xDai
+`truffle deploy --reset --network xdai` deploy to xDai
 
 Use [instruction](https://www.xdaichain.com/for-developers/developer-resources/smart-contract-deployment).
